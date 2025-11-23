@@ -1,0 +1,16 @@
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\bin\Debug\net9.0\FlickerFlow.Transports.RabbitMq.deps.json
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\bin\Debug\net9.0\FlickerFlow.Transports.RabbitMq.dll
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\bin\Debug\net9.0\FlickerFlow.Transports.RabbitMq.pdb
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\bin\Debug\net9.0\FlickerFlow.Abstractions.dll
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\bin\Debug\net9.0\FlickerFlow.Abstractions.pdb
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.csproj.AssemblyReference.cache
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.AssemblyInfoInputs.cache
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.AssemblyInfo.cs
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.csproj.CoreCompileInputs.cache
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.sourcelink.json
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerF.AD5627A2.Up2Date
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.dll
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\refint\FlickerFlow.Transports.RabbitMq.dll
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\FlickerFlow.Transports.RabbitMq.pdb
+C:\projects\FlickerFlow\src\FlickerFlow.Transports.RabbitMq\obj\Debug\net9.0\ref\FlickerFlow.Transports.RabbitMq.dll

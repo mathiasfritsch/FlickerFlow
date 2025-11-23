@@ -161,7 +161,6 @@ FlickerFlow is a distributed messaging framework for .NET that provides a messag
 #### Acceptance Criteria
 
 1. THE FlickerFlow System SHALL serialize messages using System.Text.Json by default
-2. THE FlickerFlow System SHALL support alternative serializers including Newtonsoft.Json and MessagePack
 3. THE FlickerFlow System SHALL include message type information in serialized messages
 4. WHEN deserializing, THE FlickerFlow System SHALL automatically detect and instantiate the correct message type
 5. THE FlickerFlow System SHALL handle polymorphic message types correctly
