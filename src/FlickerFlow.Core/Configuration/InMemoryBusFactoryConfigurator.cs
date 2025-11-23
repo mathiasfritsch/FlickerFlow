@@ -15,8 +15,23 @@ internal class InMemoryBusFactoryConfigurator : BusFactoryConfiguratorBase, IInM
 
     public override ITransport Build()
     {
-        // This will be implemented when we create the in-memory transport
-        // For now, throw to indicate it's not yet implemented
-        throw new NotImplementedException("In-memory transport will be implemented in task 6");
+        // Create the in-memory transport with the configured receive endpoints
+        var transportType = Type.GetType("FlickerFlow.Transports.InMemory.InMemoryTransport, FlickerFlow.Transports.InMemory");
+        
+        if (transportType == null)
+        {
+            throw new InvalidOperationException(
+                "FlickerFlow.Transports.InMemory assembly not found. " +
+                "Please add a reference to FlickerFlow.Transports.InMemory package.");
+        }
+
+        var transport = Activator.CreateInstance(transportType, ServiceProvider, ReceiveEndpoints) as ITransport;
+        
+        if (transport == null)
+        {
+            throw new InvalidOperationException("Failed to create InMemoryTransport instance");
+        }
+
+        return transport;
     }
 }

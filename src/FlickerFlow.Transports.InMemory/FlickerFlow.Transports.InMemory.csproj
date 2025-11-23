@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FlickerFlow.Abstractions\FlickerFlow.Abstractions.csproj" />
+    <ProjectReference Include="..\FlickerFlow.Core\FlickerFlow.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

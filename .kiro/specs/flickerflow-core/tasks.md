@@ -144,20 +144,29 @@
   - Register IBus as singleton in service container
   - _Requirements: 4.5, 6.1, 6.2, 6.3, 6.4, 6.5_
 
-- [ ] 6. Implement in-memory transport
+- [x] 6. Implement in-memory transport
+
+
+
+
+
   - Create InMemoryTransport class implementing ITransport
   - Implement in-memory message delivery using concurrent collections
   - Implement all core messaging patterns (publish, send, consume)
   - Support message routing and consumer invocation
   - _Requirements: 5.1, 5.2, 17.1, 17.2, 17.3_
 
-- [ ] 6.1 Implement in-memory transport configuration
+- [x] 6.1 Implement in-memory transport configuration
+
+
   - Create UsingInMemory configuration method
   - Implement in-memory receive endpoint configuration
   - Support state reset for testing scenarios
   - _Requirements: 17.5_
 
-- [ ] 6.2 Implement test harness utilities
+
+- [-] 6.2 Implement test harness utilities
+
   - Create ITestHarness interface with Published, Consumed, Sent assertion methods
   - Implement TestHarness class that tracks message flow
   - Implement IConsumerTestHarness for consumer-specific assertions
