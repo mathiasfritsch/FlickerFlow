@@ -131,7 +131,12 @@
   - Apply configured error handling policy on consumer exceptions
   - _Requirements: 3.2, 3.3, 3.4, 3.5, 6.5_
 
-- [ ] 5. Implement dependency injection configuration
+- [x] 5. Implement dependency injection configuration
+
+
+
+
+
   - Create AddFlickerFlow extension method for IServiceCollection
   - Implement fluent configuration API for transport selection
   - Implement consumer registration through AddConsumer<T> method
