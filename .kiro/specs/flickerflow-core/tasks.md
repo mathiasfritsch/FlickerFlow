@@ -34,7 +34,10 @@
   - Implement transport configuration base classes
   - _Requirements: 5.1, 5.2, 5.3_
 
-- [ ] 2. Implement serialization infrastructure
+- [-] 2. Implement serialization infrastructure
+
+
+
   - Create IMessageSerializer interface with Serialize and Deserialize methods
   - Implement System.Text.Json serializer as default
   - Implement type information extraction and embedding in message envelope
