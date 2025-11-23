@@ -2,7 +2,7 @@
 
 ## Introduction
 
-FlickerFlow is a distributed messaging framework for .NET that provides a message-based, loosely-coupled architecture for building scalable applications. The framework abstracts multiple message transport implementations (RabbitMQ, Azure Service Bus, Amazon SQS, Kafka, SQL-based, and In-Memory) behind a unified API, enabling developers to focus on business logic rather than infrastructure concerns. FlickerFlow supports pub/sub patterns, point-to-point messaging, request/response communication, saga orchestration, message scheduling, and configurable middleware pipelines with retry policies and error handling.
+FlickerFlow is a distributed messaging framework for .NET that provides a message-based, loosely-coupled architecture for building scalable applications. The framework abstracts multiple message transport implementations (RabbitMQ and In-Memory) behind a unified API, enabling developers to focus on business logic rather than infrastructure concerns. FlickerFlow supports pub/sub patterns, point-to-point messaging, request/response communication, saga orchestration, message scheduling, and configurable middleware pipelines with retry policies and error handling.
 
 ## Glossary
 
@@ -11,7 +11,7 @@ FlickerFlow is a distributed messaging framework for .NET that provides a messag
 - **Consumer**: A component that processes incoming messages by implementing the IConsumer interface
 - **Publisher**: A component that broadcasts messages to multiple subscribers using the pub/sub pattern
 - **Sender**: A component that sends messages directly to a specific queue or endpoint
-- **Transport**: The underlying message broker implementation (RabbitMQ, Azure Service Bus, etc.)
+- **Transport**: The underlying message broker implementation (RabbitMQ or In-Memory)
 - **Receive Endpoint**: A queue or subscription that receives and processes messages
 - **Send Endpoint**: A destination queue or topic where messages are sent
 - **Publish Endpoint**: A broadcast mechanism that sends messages to all subscribers
@@ -76,7 +76,7 @@ FlickerFlow is a distributed messaging framework for .NET that provides a messag
 
 #### Acceptance Criteria
 
-1. THE FlickerFlow System SHALL provide transport abstractions for RabbitMQ, Azure Service Bus, Amazon SQS, Kafka, SQL databases, and in-memory messaging
+1. THE FlickerFlow System SHALL provide transport abstractions for RabbitMQ and in-memory messaging
 2. THE FlickerFlow System SHALL expose a consistent API across all transport implementations
 3. WHEN configuring a transport, THE FlickerFlow System SHALL accept transport-specific connection settings
 4. THE FlickerFlow System SHALL create the necessary infrastructure (exchanges, queues, topics) based on the transport type
