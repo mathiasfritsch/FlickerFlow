@@ -1,99 +1,128 @@
-Here is the detailed technical specification for building "FlickerFlow," a distributed messaging framework
+# Core Messaging Architecture
 
-***
+FlickerFlow uses a message-based, loosely-coupled architecture with several key components:
 
-## FlickerFlow Framework Specification
+## 1. Message Producers (Sending Messages)
 
-### 1. Core Interfaces & Messaging Abstractions
+There are two primary ways to send messages:
 
-- **IBus**: Core messaging interface for sending, publishing, and request/response patterns.
-- **IBusControl**: Extends IBus, controlling bus lifecycle (start, stop).
-- **ISendEndpointProvider**: Resolves specific endpoints for message sending.
-- **IPublishEndpoint**: Provides event publishing capabilities.
-- **IReceiveEndpointConnector**: Manages queue/topic bindings and consumer registrations.
-- **IConsumer<TMessage>**: Generic consumer interface with `Consume(ConsumeContext<TMessage> context)` to handle messages.
+### Publish (Pub/Sub Pattern)
 
-### 2. Message Contracts & Metadata
-
-- POCO or record classes representing messages with serialization attributes.
-- Standard metadata support (CorrelationId, headers).
-- Conventions for message types and correlation identifiers.
-
-### 3. Transport Abstraction Layer
-
-- Unified abstraction over message brokers supporting:
-  - RabbitMQ
-  - Azure Service Bus
-  - Amazon SQS
-- Each transport adapter implements:
-  - Connection and session management
-  - Queue/topic lifecycle management
-  - Message serialization and deserialization (JSON by default)
-  - Configuration for scalability (prefetch, concurrency)
-
-### 4. Consumer & Endpoint Management
-
-- Consumers registered and resolved through DI container.
-- Receive endpoints bind consumers to queues/topics.
-- Middleware pipeline supports:
-  - Retry policies (immediate, exponential backoff)
-  - Message filters and logging
-- Automatic message acknowledgment and error forwarding to dead-letter queues.
-
-### 5. Sagas & State Machine Support
-
-- Saga interfaces for long-running workflow state.
-- Fluent builder API for state machine definition.
-- Persistence plugins supporting:
-  - Entity Framework Core
-  - MongoDB
-  - Redis
-- State transition logic with compensation and event-driven triggers.
-
-### 6. Fault Handling & Diagnostics
-
-- Retry and circuit breaker policies with configurable backoff.
-- Dead-letter queue management.
-- Integration with structured logging (e.g., Microsoft.Extensions.Logging).
-- Health checks for bus and endpoint readiness.
-- Support OpenTelemetry instrumentation for tracing.
-
-### 7. Configuration API & Dependency Injection
-
-- Fluent API for bus, consumer, saga, and transport setup.
-- Example configuration snippet:
-
+- Uses `IPublishEndpoint` interface
+- Broadcasts messages to all subscribers
+- The transport determines the actual destination (e.g., RabbitMQ exchange, Azure Service Bus topic)
+- Example:
   ```csharp
-  services.AddFlickerFlow(x =>
-  {
-      x.AddConsumer<MyEnergyConsumer>();
-      x.AddSagaStateMachine<MyStateMachine, MyState>()
-          .EntityFrameworkRepository(r => {
-              r.AddDbContext<MySagaDbContext>();
-              r.UseSqlServer();
-          });
-      x.UsingRabbitMq((context, cfg) =>
-      {
-          cfg.Host("rabbitmq://energy-broker");
-          cfg.ConfigureEndpoints(context);
-          cfg.ReceiveEndpoint("energy-queue", e =>
-          {
-              e.ConfigureConsumer<MyEnergyConsumer>(context);
-              e.PrefetchCount = 64;
-          });
-      });
-  });
+  await bus.Publish<OrderSubmitted>(new { OrderId = 123 });
   ```
 
-### 8. Extensibility & Plugins
+### Send (Point-to-Point)
 
-- Custom serializer plugins (JSON, MessagePack, Protobuf).
-- Middleware support for cross-cutting concerns (authorization, metrics).
-- Additional transport adapters ("riders") for new brokers.
-- Routing slip and event routing support for complex workflows.
+- Uses `ISendEndpoint` interface
+- Sends directly to a specific queue/endpoint
+- You need to get the endpoint first:
+  ```csharp
+  var endpoint = await bus.GetSendEndpoint(uri);
+  await endpoint.Send<ProcessOrder>(new { OrderId = 123 });
+  ```
+## 2. Message Consumers
 
-### 9. Packaging & Build
+Consumers implement the `IConsumer<TMessage>` interface:
 
-- Modular .NET solutions targeting .NET 9 and above.
-- NuGet packages for core, transports, sagas, and extensions.
-- CI/CD pipeline with unit, integration, and performance tests.
+```csharp
+public interface IConsumer<in TMessage> : IConsumer
+    where TMessage : class
+{
+    Task Consume(ConsumeContext<TMessage> context);
+}
+```
+
+The `ConsumeContext` provides:
+
+- Access to the message
+- Ability to publish/send other messages
+- Response capabilities for request/response patterns
+- Message headers and metadata
+- Serialization context
+## 3. The Bus
+
+The `IBus` interface is the central component that:
+
+- Implements both `IPublishEndpoint` and `ISendEndpointProvider`
+- Manages receive endpoints (queues)
+- Provides topology configuration
+- Handles connection management
+## 4. Transport Layer
+
+FlickerFlow abstracts different message brokers through transport implementations:
+
+- **RabbitMQ** - Uses exchanges and queues
+- **Azure Service Bus** - Uses topics and queues
+- **Amazon SQS** - Uses SQS queues
+- **Kafka** - Uses topics (as a "rider")
+- **SQL Transport** - Uses database tables (PostgreSQL, SQL Server)
+- **In-Memory** - For testing
+## 5. Configuration Pattern
+
+Based on the structure, configuration typically follows this pattern:
+
+```csharp
+// Register with dependency injection
+services.AddFlickerFlow(x =>
+{
+    // Add consumers
+    x.AddConsumer<OrderConsumer>();
+    
+    // Configure transport
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost");
+        
+        // Configure receive endpoints
+        cfg.ReceiveEndpoint("order-queue", e =>
+        {
+            e.ConfigureConsumer<OrderConsumer>(context);
+        });
+    });
+});
+```
+## 6. Key Features
+
+### Middleware Pipeline
+
+- Messages flow through a configurable pipeline
+- Supports retry policies, circuit breakers, rate limiting, concurrency limits
+- Filters can transform, validate, or route messages
+
+### Sagas (State Machines)
+
+- Long-running workflows using the Automatonymous state machine library
+- Tracks state across multiple messages
+- Supports compensation (undo operations)
+
+### Request/Response
+
+- `IRequestClient<TRequest>` for synchronous-style communication
+- Handles correlation, timeouts, and fault handling
+
+### Scheduling
+
+- Delayed message delivery
+- Recurring messages
+- Integration with Quartz or Hangfire
+
+### Serialization
+
+- Default: System.Text.Json
+- Also supports Newtonsoft.Json, MessagePack
+- Automatic message type detection
+## 7. Message Topology
+
+FlickerFlow automatically creates the necessary infrastructure:
+
+- **Publish**: Creates exchanges/topics and bindings
+- **Send**: Creates queues
+- **Consumers**: Automatically binds message types to endpoints
+- Supports custom naming conventions (kebab-case, snake-case, etc.)
+
+The framework handles all the complexity of message routing, serialization, error handling, and retry logic, letting you focus on business logic in your consumers.
